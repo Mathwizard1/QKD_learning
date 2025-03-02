@@ -1,0 +1,6 @@
+qiskit
+qiskit_ibm_runtime
+qiskit-aer
+matplotlib
+pylatexenc
+ipykernel
