@@ -1,11 +1,28 @@
 import pickle as pk
 from qiskit import QuantumCircuit
+import random as rd
 
-message_bits = (0, 1)
-empty = -1
-possible_bases = ['H', 'D']
+MESSAGE_BITS = (0, 1)
+EMPTY= -1
+POSSIBLE_BASES = ['H', 'D']
 
-possible_gates = ['x', 'h', 'z', 'cx']
+POSSIBLE_GATES = ['x', 'h', 'z', 'cx']
+
+MAX_KEY_LENGTH = 48
+SIMULATOR_METHOD = "matrix_product_state"
+
+# random message
+def generate_random_bits(length):
+    bits = [rd.choice(MESSAGE_BITS) for _ in range(length)]
+    return bits
+
+def Generate_random_bases(key_length):
+    hf_key = int(key_length / 2)
+    bases = [POSSIBLE_BASES[0]] * hf_key + [POSSIBLE_BASES[1]] * (key_length - hf_key)
+    # print(bases)
+
+    rd.shuffle(bases)
+    return bases
 
 def encrypter_decrypter(A = "", L = []):
     if(L == []):
@@ -62,7 +79,7 @@ def encryption_decryption(message= None, key= None, mode= "encryption"):
 
 answer_file = 'answer.bin'
 
-class QQ2grader:
+class grader:
     def __init__(self):
         self.__score = 0
         self.__answer_list = {}
@@ -86,9 +103,9 @@ Help Agent A and Agent B communicate the secret code.
 All The best!
 ''')
 
-    def file_dump(self):
+    def ans_dump(self, qkd_name):
         self.__answer_list[0] = (self.name, self.rollno)
-        with open(answer_file, 'wb') as fp:
+        with open(qkd_name + answer_file, 'wb') as fp:
             pk.dump(self.__answer_list, fp)
 
     def check_task(self, obj, i):
@@ -99,7 +116,15 @@ All The best!
             print(f"Good Job {self.name}🕵️. You passed.✅")
         else:
           print("Try Again.🔄")    
-        print("Your score: ", self.__score)      
+        print("Your score: ", self.__score)    
+
+# For B92
+class B92(grader):
+    def __init__(self):
+        super().__init__()
+
+    def file_dump(self):
+        self.ans_dump("B92_")
 
     def Q1(self, qc: QuantumCircuit, bits: list):
         self.__task_flag = True
@@ -113,11 +138,11 @@ All The best!
         for qcInstruction in qcInstructions:
             # print(qcInstruction)
 
-            if(qcInstruction.name == possible_gates[1]):
+            if(qcInstruction.name == POSSIBLE_GATES[1]):
                 qIndex = qcInstruction.qubits[0]._index
                 # print(qIndex)
 
-                if(bits[qIndex] != message_bits[1]):
+                if(bits[qIndex] != MESSAGE_BITS[1]):
                     print('Wrong encoding.')
                     self.__task_flag = False
                     break
@@ -131,7 +156,7 @@ All The best!
     def Q2(self, qc: QuantumCircuit, bases: list):
         self.__task_flag = True
 
-        temp_bases = list([empty] * len(bases))
+        temp_bases = list([EMPTY] * len(bases))
         barrier_found = False
         qcInstructions = qc.data
 
@@ -139,14 +164,14 @@ All The best!
             # print(qcInstruction)
 
             if(qcInstruction.name == 'barrier' or barrier_found):
-                if(qcInstruction.name == possible_gates[1]):
+                if(qcInstruction.name == POSSIBLE_GATES[1]):
                     qIndex = qcInstruction.qubits[0]._index
                     # print(qIndex)
 
-                    if(bases[qIndex] != possible_bases[1] or temp_bases[qIndex] == bases[qIndex]):
+                    if(bases[qIndex] != POSSIBLE_BASES[1] or temp_bases[qIndex] == bases[qIndex]):
                         self.__task_flag = False
                         break
-                    temp_bases[qIndex] = possible_bases[1]
+                    temp_bases[qIndex] = POSSIBLE_BASES[1]
 
                 elif(qcInstruction.name != 'barrier'):
                     print(f'Wrong {qcInstruction.name} gate.')
@@ -156,7 +181,7 @@ All The best!
                 if(not barrier_found):
                     barrier_found = True
                 elif(qcInstruction.name == 'barrier' and barrier_found):
-                    if(possible_bases[1] in bases and possible_bases[1] not in temp_bases):
+                    if(POSSIBLE_BASES[1] in bases and POSSIBLE_BASES[1] not in temp_bases):
                         print("Error in bases and gates")
                         self.__task_flag = False
                     break
@@ -177,11 +202,11 @@ All The best!
         self.__task_flag = True
 
         if(len(unity_indexes) == 0):
-            print("Re-run for Non-empty u_index key.")
+            print("Re-run for Non-EMPTYu_index key.")
             self.__task_flag = False
 
         for index in unity_indexes:
-            if(index > len(bits) or bits[index] == empty):
+            if(index > len(bits) or bits[index] == EMPTY):
                 self.__task_flag = False
                 break
 
@@ -216,3 +241,19 @@ All The best!
         else:
             self.__task_flag = False
         self.check_task((key_1, key_2), 6)
+
+# For BB84
+class BB84(grader):
+    def __init__(self):
+        super().__init__()
+
+    def file_dump(self):
+        self.ans_dump("BB84_")
+
+# For E91
+class E91(grader):
+    def __init__(self):
+        super().__init__()
+
+    def file_dump(self):
+        self.ans_dump("E91_")
