@@ -241,19 +241,3 @@ class B92(grader):
         else:
             self.__task_flag = False
         self.check_task((key_1, key_2), 6)
-
-# For BB84
-class BB84(grader):
-    def __init__(self):
-        super().__init__()
-
-    def file_dump(self):
-        self.ans_dump("BB84_")
-
-# For E91
-class E91(grader):
-    def __init__(self):
-        super().__init__()
-
-    def file_dump(self):
-        self.ans_dump("E91_")
