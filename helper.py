@@ -2,6 +2,8 @@ import pickle as pk
 from qiskit import QuantumCircuit
 import random as rd
 
+from typing import overload
+
 MESSAGE_BITS = (0, 1)
 EMPTY= -1
 POSSIBLE_BASES = ['H', 'D']
@@ -25,13 +27,18 @@ def Generate_random_bases(key_length):
     rd.shuffle(bases)
     return bases
 
-def encrypter_decrypter(A = "", L = []):
-    if(L == []):
+@overload
+def encrypter_decrypter(A:str) -> list: ...
+@overload
+def encrypter_decrypter(A:list) -> str: ...
+
+def encrypter_decrypter(A:str|list):
+    if(isinstance(A, str)):
         ascii_value = ord(A)  # Get the ASCII value of the character
         binary_string = bin(ascii_value)[2:].zfill(8)   # Convert to 8-bit binary string
         return [int(bit) for bit in binary_string]      # Convert to list of integers
-    if(A == ""):
-        byte_string = "".join(map(str, L))  # Convert bits to a string
+    if(isinstance(A, list)):
+        byte_string = "".join(map(str, A))  # Convert bits to a string
         ascii_value = int(byte_string, 2)   # Convert binary string to integer
         return chr(ascii_value)             # Convert ASCII value to character
 
@@ -68,7 +75,7 @@ def encryption_decryption(message= None, key= None, mode= "encryption"):
                     bin_list[i] = bin_list[i] ^ key[k]
                     k = (k + 1) % (len(key))
                 #
-                decryp_message += encrypter_decrypter(L= bin_list)
+                decryp_message += encrypter_decrypter(A= bin_list)
                 d += 8
             return decryp_message
         else:
