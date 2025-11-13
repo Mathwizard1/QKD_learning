@@ -1,8 +1,28 @@
-# Quantum Key Distribution (QKD) Protocol
-This project implements a Quantum Key Distribution (QKD) Protocol using quantum computing concepts. QKD enables two parties, typically named Alice and Bob, to securely share a cryptographic key that can be used for symmetric encryption. The security of the key exchange is guaranteed by the laws of quantum mechanics, specifically through the no-cloning theorem, which prevents an eavesdropper (Eve) from copying the quantum states without detection.
+# Quantum Key Distribution (QKD) — Basic
 
-# Current Features
-Implementation of the B92 protocol.
-Simulation of quantum circuits using Qiskit_Aer and classical post-processing to generate a shared secret key.
-Visualization of quantum states and measurements.
-Error detection mechanism to ensure eavesdropping is detected.
+A small project demonstrating Quantum Key Distribution concepts and simulations using Qiskit. It includes examples of QKD protocols and classical post-processing to produce shared secret keys that can be used with a Vernam cipher (one‑time pad).
+
+## QKD protocols
+- BB84
+- B92
+- E91
+
+## Current Features
+- Entanglement examples and circuit construction for E91-style experiments
+- Classical post-processing: basis reconciliation and key sifting
+- Visualization of states and measurement histograms
+- Simple Vernam cipher (one‑time pad) encryption/decryption using generated keys
+
+## Quick start
+1. Create and activate a Python virtual environment.
+2. Install dependencies from requirements.txt.
+3. Run the notebook(s) to simulate circuits and generate keys.
+
+## License
+Creative Commons. (applies only on QKD notebooks)  
+Owner: Anshurup Gupta
+
+### 📬 Contact
+
+Maintained by Anshurup Gupta.<br>
+For questions or collaborations, open an issue or [email](mailto:anshurup.gupta@gmail.com).
